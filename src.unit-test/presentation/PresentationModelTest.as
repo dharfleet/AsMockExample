@@ -83,9 +83,22 @@ package presentation
 		[Test]
 		public function testMakeBooking() : void
 		{
+			var customerContraint : AbstractConstraint = new And([Property.value("title", titleFixture),
+																  Property.value("firstName", firstNameFixture),
+																  Property.value("lastName", lastNameFixture)]);
+
+			var checkInDateConstraint : AbstractConstraint = new And([Property.value("fullYear", 2012), 
+																	  Property.value("month", 05), 
+																	  Property.value("date", 06)]);
+
+			var checkOutDateConstraint : AbstractConstraint = new And([Property.value("fullYear", 2012), 
+																	   Property.value("month", 05), 
+																	   Property.value("date", 07)]);
+
 			Expect.call(serviceMock.createBooking(null, null, null, null))
-				.ignoreArguments()
-				.returnValue(expectedBooking);
+				.constraints([customerContraint, checkInDateConstraint, checkOutDateConstraint, Is.typeOf(RoomType)])
+				.returnValue(expectedBooking)
+				.message("the pm should call service.createBooking(..)");
 
 			mockRepository.replayAll();
 
