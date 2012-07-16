@@ -83,6 +83,8 @@ package presentation
 		[Test]
 		public function testMakeBooking() : void
 		{
+			var bookingsListConstraint : AbstractConstraint = new And([Is.typeOf(IList), Is.notNull()]);
+
 			var customerContraint : AbstractConstraint = new And([Property.value("title", titleFixture),
 																  Property.value("firstName", firstNameFixture),
 																  Property.value("lastName", lastNameFixture)]);
@@ -95,10 +97,13 @@ package presentation
 																	   Property.value("month", 05), 
 																	   Property.value("date", 07)]);
 
-			Expect.call(serviceMock.createBooking(null, null, null, null))
-				.constraints([customerContraint, checkInDateConstraint, checkOutDateConstraint, Is.typeOf(RoomType)])
-				.returnValue(expectedBooking)
-				.message("the pm should call service.createBooking(..)");
+			Expect.call(serviceMock.createBooking(null, null, null, null, null))
+				.constraints([bookingsListConstraint, customerContraint, checkInDateConstraint, checkOutDateConstraint, Is.typeOf(RoomType)])
+				.doAction(function(existingBookings : IList, customer : Customer, checkInDate : Date, checkOutDate : Date, roomType : RoomType) : void
+				{
+					existingBookings.addItem(expectedBooking);
+				});
+
 
 			mockRepository.replayAll();
 

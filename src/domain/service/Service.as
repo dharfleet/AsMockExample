@@ -9,7 +9,7 @@ package domain.service
 	public interface Service
 	{
 
-		function createBooking(customer : Customer, checkInDate : Date, checkOutDate : Date, roomType : RoomType) : Booking;
+		function createBooking(existingBookings : IList, customer : Customer, checkInDate : Date, checkOutDate : Date, roomType : RoomType) : void;
 
 	}
 }

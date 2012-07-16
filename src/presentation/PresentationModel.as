@@ -26,8 +26,7 @@ package presentation
 
 		public function makeBooking(checkInDate : Date, checkOutDate : Date, roomType : RoomType) : void
 		{
-			var booking : Booking = service.createBooking(customer, checkInDate, checkOutDate, roomType);
-			_bookings.addItem(booking);
+			service.createBooking(_bookings, customer, checkInDate, checkOutDate, roomType);
 		}
 
 
